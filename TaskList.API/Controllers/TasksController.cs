@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TaskList.API.Models;
 
 namespace TaskList.API.Controllers
 {
+
+    [ValidateModel]
     [Route("api/[controller]")]
     public class TasksController : Controller
     {
+        public TasksController()
+        {
+
+        }
+
         [HttpGet]
         public IEnumerable<string> Get()
         {
@@ -16,19 +24,18 @@ namespace TaskList.API.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody]TaskApiModel task)
         {
         }
 
-        // PUT api/tasks/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public void Put(Guid id, [FromBody]TaskApiModel task)
         {
         }
 
-        // DELETE api/tasks/5
+
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
         }
     }
