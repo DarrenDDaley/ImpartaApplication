@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TaskList.API.Database;
 using TaskList.API.Models;
 
 namespace TaskList.API.Controllers
@@ -12,31 +14,81 @@ namespace TaskList.API.Controllers
     [Route("api/[controller]")]
     public class TasksController : Controller
     {
-        public TasksController()
-        {
+        private readonly TaskDbContext context;
 
+        public TasksController(TaskDbContext context)
+        {
+            this.context = context ?? throw new ArgumentException(nameof(context)); 
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
+        public async Task<IEnumerable<TaskItem>> Get() {
+            return await context.Tasks.ToListAsync();
         }
 
-        [HttpPost]
-        public void Post([FromBody]TaskApiModel task)
+        [HttpPost("add")]
+        public async Task<IActionResult> Post([FromBody]TaskItemAPI task)
         {
+            var taskItem = new TaskItem()
+            {
+                Done = task.Done,
+                Id = Guid.NewGuid(),
+                Description = task.Description
+            };
+
+            context.Add(taskItem);
+            await context.SaveChangesAsync();
+
+            return Ok(taskItem.Id);
         }
 
-        [HttpPut("{id}")]
-        public void Put(Guid id, [FromBody]TaskApiModel task)
+        [HttpPut("edit/{id}")]
+        public async Task<IActionResult> Put(Guid id, [FromBody]TaskItemAPI task)
         {
+            if (!context.Tasks.Any(t => t.Id == id)) {
+                return NotFound();
+            }
+
+            var taskItem = new TaskItem()
+            {
+                Done = task.Done,
+                Id = Guid.NewGuid(),
+                Description = task.Description
+            };
+
+            context.Update(taskItem);
+            await context.SaveChangesAsync();
+            return Ok();
         }
 
-
-        [HttpDelete("{id}")]
-        public void Delete(Guid id)
+        [HttpPut("done/{id}")]
+        public async Task<IActionResult> Put(Guid id, bool done)
         {
+            var taskItem = await context.Tasks.SingleOrDefaultAsync(t => t.Id == id);
+
+            if (taskItem == null) {
+                return NotFound();
+            }
+
+            taskItem.Done = done;
+
+            context.Update(taskItem);
+            await context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var taskItem = await context.Tasks.SingleOrDefaultAsync(t => t.Id == id);
+
+            if(taskItem == null) {
+                return NotFound();
+            }
+
+            context.Remove(taskItem);
+            await context.SaveChangesAsync();
+            return Ok();
         }
     }
 }
