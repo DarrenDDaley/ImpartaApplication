@@ -14,15 +14,16 @@ namespace TaskList.API.Controllers
     [Route("api/[controller]")]
     public class TasksController : Controller
     {
-        private readonly TaskDbContext context;
+        private readonly ITaskDbContext<TaskItem> context;
 
-        public TasksController(TaskDbContext context)
+        public TasksController(ITaskDbContext<TaskItem> context)
         {
-            this.context = context ?? throw new ArgumentException(nameof(context)); 
+            this.context = context ?? throw new ArgumentNullException(nameof(context)); 
         }
 
         [HttpGet]
-        public async Task<IEnumerable<TaskItem>> Get() {
+        public async Task<IEnumerable<TaskItem>> Get()
+        {
             return await context.Tasks.ToListAsync();
         }
 
