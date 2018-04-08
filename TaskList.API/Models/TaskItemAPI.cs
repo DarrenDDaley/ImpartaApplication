@@ -11,7 +11,7 @@ namespace TaskList.API.Models
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (string.IsNullOrWhiteSpace(Description)) {
-                yield return new ValidationResult("Task can't be empty or null.");
+                yield return new ValidationResult("Description can't be empty or null.");
             }
         }
     }

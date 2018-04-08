@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using TaskList.API.Controllers;
 using TaskList.API.Database;
@@ -73,6 +75,25 @@ namespace TaskList.Tests
 
             error.Should().BeOfType<ArgumentNullException>();
             error.Message.Should().Be("Value cannot be null.\r\nParameter name: context");
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public void TaskItemAPIModel_WithInvaildDescription_ShouldReturnValidationError(string input)
+        {
+            // Arrange
+            var arrangement = new TaskItemAPI() { Description = input, Done = true };
+
+            // Act 
+            var validationContext = new ValidationContext(arrangement);
+
+            var result = arrangement.Validate(validationContext);
+
+            // Assert
+            result.Count().Should().Be(1);
+            result.First().ErrorMessage.Should().Be("Description can't be empty or null.");
         }
 
         [Fact]
