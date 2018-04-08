@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using TaskList.API.Database;
 using TaskList.API.Models;
 
@@ -10,20 +9,22 @@ namespace TaskList.Tests
 {
     public class TaskDbContextStub : ITaskDbContext<TaskItem>
     {
+        private List<TaskItem> tasks = new List<TaskItem>();
 
-        private List<TaskItem> items = new List<TaskItem>();
+        public void Add(TaskItem item) => tasks.Add(item);
 
-        public DbSet<TaskItem> Tasks { get => (DbSet<TaskItem>)items.AsQueryable();
-                                       set => items =(List<TaskItem>) value.AsQueryable(); }
+        public Task<bool> Exists(Guid id) => Task.FromResult(tasks.Any(t => t.Id == id));
 
-        public void Add(TaskItem item) => items.Add(item);
+        public Task<TaskItem> Get(Guid id) => Task.FromResult(tasks.SingleOrDefault(t => t.Id == id));
 
-        public void Remove(TaskItem item) => items.Remove(item);
+        public Task<List<TaskItem>> GetAll() => Task.FromResult(tasks);
+
+        public void Remove(TaskItem item) => Task.FromResult(tasks.Remove(item));
 
         public Task<int> SaveChangesAsync() => Task.FromResult(1);
 
         public void Update(TaskItem item) { }
 
-        public void Dispose() => throw new NotImplementedException();
+        public void Dispose() { }
     }
 }

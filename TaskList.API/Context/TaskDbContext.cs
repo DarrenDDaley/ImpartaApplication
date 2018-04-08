@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TaskList.API.Models;
 
@@ -10,7 +12,7 @@ namespace TaskList.API.Database
             : base(options)
         { }
 
-        public DbSet<TaskItem> Tasks { get; set; }
+        private DbSet<TaskItem> tasks { get; set; }
 
         public void Add(TaskItem item) => base.Add(item);
 
@@ -19,5 +21,11 @@ namespace TaskList.API.Database
         public void Update(TaskItem item) => base.Update(item);
 
         public Task<int> SaveChangesAsync() => base.SaveChangesAsync();
+
+        public Task<TaskItem> Get(Guid id) => tasks.SingleOrDefaultAsync(t => t.Id == id);
+
+        public Task<bool> Exists(Guid id) => tasks.AnyAsync(t => t.Id == id);
+
+        public Task<List<TaskItem>> GetAll() =>  tasks.ToListAsync();
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TaskList.API.Database;
 using TaskList.API.Models;
 
@@ -22,9 +20,8 @@ namespace TaskList.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<TaskItem>> Get()
-        {
-            return await context.Tasks.ToListAsync();
+        public async Task<IEnumerable<TaskItem>> Get() {
+            return await context.GetAll();
         }
 
         [HttpPost("add")]
@@ -46,7 +43,7 @@ namespace TaskList.API.Controllers
         [HttpPut("edit/{id}")]
         public async Task<IActionResult> Put(Guid id, [FromBody]TaskItemAPI task)
         {
-            if (!context.Tasks.Any(t => t.Id == id)) {
+            if (!await context.Exists(id)) {
                 return NotFound();
             }
 
@@ -65,7 +62,7 @@ namespace TaskList.API.Controllers
         [HttpPut("done/{id}")]
         public async Task<IActionResult> Put(Guid id, bool done)
         {
-            var taskItem = await context.Tasks.SingleOrDefaultAsync(t => t.Id == id);
+            var taskItem = await context.Get(id);
 
             if (taskItem == null) {
                 return NotFound();
@@ -81,7 +78,7 @@ namespace TaskList.API.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var taskItem = await context.Tasks.SingleOrDefaultAsync(t => t.Id == id);
+            var taskItem = await context.Get(id);
 
             if(taskItem == null) {
                 return NotFound();

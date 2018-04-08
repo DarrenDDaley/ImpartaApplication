@@ -95,7 +95,7 @@ namespace TaskList.Tests
         }
 
         [Fact]
-        public async Task Put_WithNoRecord_ShouldReturnNotFound()
+        public async Task Edit_WithNoRecord_ShouldReturnNotFound()
         {
             // Act 
             var arrangement = new ArrangementBuilder()
@@ -108,6 +108,86 @@ namespace TaskList.Tests
 
             // Assert
             result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task Edit_WithRecord_ShouldReturnOk()
+        {
+            // Act 
+            var arrangement = new ArrangementBuilder()
+                .WithTaskItem()
+                .OnRecord()
+                .Build();
+
+            // Arrange
+            var result = await arrangement.SUT.Put(arrangement.Id, arrangement.Task);
+
+            // Assert
+            result.Should().BeOfType<OkResult>();
+        }
+
+        [Fact]
+        public async Task Done_WithNoRecord_ShouldReturnNotFound()
+        {
+            // Act 
+            var arrangement = new ArrangementBuilder()
+                .WithTaskItem()
+                .Build();
+
+            // Arrange
+            var result = await arrangement.SUT.Put(arrangement.Id, true);
+
+
+            // Assert
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task Done_WithRecord_ShouldReturnOk()
+        {
+            // Act 
+            var arrangement = new ArrangementBuilder()
+                .WithTaskItem()
+                .OnRecord()
+                .Build();
+
+            // Arrange
+            var result = await arrangement.SUT.Put(arrangement.Id, true);
+
+            // Assert
+            result.Should().BeOfType<OkResult>();
+        }
+
+        [Fact]
+        public async Task Delete_WithNoRecord_ShouldReturnNotFound()
+        {
+            // Act 
+            var arrangement = new ArrangementBuilder()
+                .WithTaskItem()
+                .Build();
+
+            // Arrange
+            var result = await arrangement.SUT.Delete(arrangement.Id);
+
+
+            // Assert
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task Delete_WithRecord_ShouldReturnOk()
+        {
+            // Act 
+            var arrangement = new ArrangementBuilder()
+                .WithTaskItem()
+                .OnRecord()
+                .Build();
+
+            // Arrange
+            var result = await arrangement.SUT.Delete(arrangement.Id);
+
+            // Assert
+            result.Should().BeOfType<OkResult>();
         }
     }
 }
