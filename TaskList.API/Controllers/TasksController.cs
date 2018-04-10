@@ -10,6 +10,7 @@ namespace TaskList.API.Controllers
 
     [ValidateModel]
     [Route("api/[controller]")]
+    [Produces("application/json")]
     public class TasksController : Controller
     {
         private readonly ITaskDbContext<TaskItem> context;

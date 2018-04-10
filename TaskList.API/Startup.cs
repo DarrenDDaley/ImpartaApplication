@@ -20,7 +20,9 @@ namespace TaskList.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddMvc();
+
 
             services.AddScoped(typeof(ITaskDbContext<TaskItem>), typeof(TaskDbContext));
 
@@ -35,6 +37,12 @@ namespace TaskList.API
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(builder => builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
 
             app.UseMvc();
         }
