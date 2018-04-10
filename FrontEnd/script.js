@@ -13,26 +13,23 @@ $.ajax({
 function createTaskList(taskList)
 {
 	$.each(taskList, function(i, task) {
-		AppenedToList(task);
+		appenedToList(task);
      });
 }
 
-function AppenedToList(task) {
+function appenedToList(task) {
 	
 	var taskElement = '<div id=\''+ task.id + '\'><p>' + task.description + 
-		'</p><button onclick="deleteTask(\''+ task.id + '\')">Delete</button>' +
-		'<input type="checkbox" name="terms" checked=\''+ task.done + '\'/> Done</div>';
+		'</p><button onclick="deleteTask(\''+ task.id + '\')">Delete</button>';
+		
+		if(task.done == true) {
+			taskElement += '<input type="checkbox" checked/> Done</div>';
+		}
+		else {
+			taskElement += '<input type="checkbox" /> Done</div>';
+		}
 		
 	$("#taskList").append(taskElement);
-}
-
-
-function PrependToList(task) {
-		var taskElement = '<div id=\''+ task.id + '\'><p>' + task.description + 
-		'</p><button onclick="deleteTask(\''+ task.id + '\')">Delete</button>' +
-		'<input type="checkbox" name="terms" checked=\''+ task.done + '\'/> Done</div>';
-		
-	$("#taskList").prepend(taskElement);
 }
 
 function postTask() {
@@ -55,13 +52,12 @@ function postTask() {
 			 id: id
 		};
 		$('#task').val('');
-		PrependToList(newTask);
+		appenedToList(newTask);
 	  }
   });
 }
 
 function deleteTask(id) {
-	
 	$.ajax({
 	type: 'DELETE',
 	url: rootURL + '/delete/'+ id,
