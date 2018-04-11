@@ -23,10 +23,10 @@ function appenedToList(task) {
 		'</p><button onclick="deleteTask(\''+ task.id + '\')">Delete</button>';
 		
 		if(task.done == true) {
-			taskElement += '<input type="checkbox" checked/> Done</div>';
+			taskElement += '<input type="checkbox" onclick="taskDone(\''+ task.id + '\')" checked/> Done</div>';
 		}
 		else {
-			taskElement += '<input type="checkbox" /> Done</div>';
+			taskElement += '<input type="checkbox" onclick="taskDone(\''+ task.id + '\')" /> Done</div>';
 		}
 		
 	$("#taskList").append(taskElement);
@@ -66,3 +66,19 @@ function deleteTask(id) {
 	  }
   });
 }
+
+function taskDone(id) {
+	
+	var done = false;
+	
+	$.ajax({
+	type: 'PUT',
+	data: done,
+	url: rootURL + '/done/'+ id,
+	});
+}
+
+
+
+
+
