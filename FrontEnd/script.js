@@ -17,20 +17,8 @@ function createTaskList(taskList)
      });
 }
 
-function appenedToList(task) {
-	
-	var taskElement = '<div id=\''+ task.id + '\'><p>' + task.description + 
-		'</p><button onclick="createEditHTML(\''+ task.id + '\', \''+ task.description + '\', ' + task.done + 
-		')">Edit</button><button onclick="deleteTask(\''+ task.id + '\')">Delete</button>';
-		
-		if(task.done == true) {
-			taskElement += '<input type="checkbox" id="checkbox-'+ task.id + '"onclick="taskDone(\''+ task.id + '\')" checked/> Done</div>';
-		}
-		else {
-			taskElement += '<input type="checkbox" id="checkbox-'+ task.id + '"onclick="taskDone(\''+ task.id + '\')" /> Done</div>';
-		}
-		
-	$("#taskList").append(taskElement);
+function appenedToList(task) {	
+	$("#taskList").append(createTaskHTML(task.id, task.description, task.done));
 }
 
 function postTask() {
@@ -88,7 +76,7 @@ function createEditHTML(id, description, done) {
 	
 	var editElements = '<div id=\''+ id + '\'><input type="text" name="editText" id="editText-'+ id +'" value="'+ description +'">'
 					    +'<button onclick="editTask(\''+ id + '\', \''+ description + '\', ' + done +')">Save</button>'
-						+'<button onclick="cancelTask(\''+ id + '\', \''+ description + '\', ' + done +')">Cancel</button><br><br>';
+						+'<button onclick="placeTask(\''+ id + '\', \''+ description + '\', ' + done +')">Cancel</button><br><br>';
 	
 	$("#" + id).replaceWith(editElements);
 }
@@ -106,11 +94,15 @@ function editTask(id, originalDesc, done) {
 	data: JSON.stringify(task),
 	contentType: 'application/json',
 	dataType: 'json',
-	success: cancelTask(id, task.description, done)
+	success: placeTask(id, task.description, done)
   });	
 }
 
-function cancelTask(id, description, done) {
+function placeTask(id, description, done) {
+	$("#" + id).replaceWith(createTaskHTML(id, description, done));
+}
+
+function createTaskHTML(id, description, done) {
 	
 	var taskElement = '<div id=\''+ id + '\'><p>' + description + 
 		'</p><button onclick="createEditHTML(\''+ id + '\', \''+ description + '\', ' + done + 
@@ -122,8 +114,8 @@ function cancelTask(id, description, done) {
 		else {
 			taskElement += '<input type="checkbox" id="checkbox-'+ id + '"onclick="taskDone(\''+ id + '\')" /> Done</div>';
 		}
-		
-	$("#" + id).replaceWith(taskElement);
+	
+	return taskElement;
 }
 
 
