@@ -70,7 +70,7 @@ function deleteTask(id) {
 function taskDone(id) {
 	
 	var done = false;
-	var checkedElement = 'checkbox-'+id;
+	var checkedElement = '#checkbox-'+id;
 	
 	if($(checkedElement).is(':checked') == true) {
 		done = true;
@@ -78,7 +78,7 @@ function taskDone(id) {
 	
 	$.ajax({
 	type: 'PUT',
-	data: done,
+	data: { "done": done },
 	url: rootURL + '/done/'+ id,
 	});
 }
