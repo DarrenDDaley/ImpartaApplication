@@ -23,10 +23,10 @@ function appenedToList(task) {
 		'</p><button onclick="deleteTask(\''+ task.id + '\')">Delete</button>';
 		
 		if(task.done == true) {
-			taskElement += '<input type="checkbox" onclick="taskDone(\''+ task.id + '\')" checked/> Done</div>';
+			taskElement += '<input type="checkbox" id="checkbox-'+ task.id + '" onclick="taskDone(\''+ task.id + '\')" checked/> Done</div>';
 		}
 		else {
-			taskElement += '<input type="checkbox" onclick="taskDone(\''+ task.id + '\')" /> Done</div>';
+			taskElement += '<input type="checkbox" id="checkbox-'+ task.id + '" onclick="taskDone(\''+ task.id + '\')" /> Done</div>';
 		}
 		
 	$("#taskList").append(taskElement);
@@ -70,6 +70,11 @@ function deleteTask(id) {
 function taskDone(id) {
 	
 	var done = false;
+	var checkedElement = 'checkbox-'+id;
+	
+	if($(checkedElement).is(':checked') == true) {
+		done = true;
+	}
 	
 	$.ajax({
 	type: 'PUT',
