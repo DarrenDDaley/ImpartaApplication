@@ -20,13 +20,14 @@ function createTaskList(taskList)
 function appenedToList(task) {
 	
 	var taskElement = '<div id=\''+ task.id + '\'><p>' + task.description + 
-		'</p><button onclick="deleteTask(\''+ task.id + '\')">Delete</button>';
+		'</p><button onclick="createEditHTML(\''+ task.id + '\', \''+ task.description + '\', ' + task.done + 
+		')">Edit</button><button onclick="deleteTask(\''+ task.id + '\')">Delete</button>';
 		
 		if(task.done == true) {
-			taskElement += '<input type="checkbox" id="checkbox-'+ task.id + '" onclick="taskDone(\''+ task.id + '\')" checked/> Done</div>';
+			taskElement += '<input type="checkbox" id="checkbox-'+ task.id + '"onclick="taskDone(\''+ task.id + '\')" checked/> Done</div>';
 		}
 		else {
-			taskElement += '<input type="checkbox" id="checkbox-'+ task.id + '" onclick="taskDone(\''+ task.id + '\')" /> Done</div>';
+			taskElement += '<input type="checkbox" id="checkbox-'+ task.id + '"onclick="taskDone(\''+ task.id + '\')" /> Done</div>';
 		}
 		
 	$("#taskList").append(taskElement);
@@ -81,6 +82,48 @@ function taskDone(id) {
 	data: { "done": done },
 	url: rootURL + '/done/'+ id,
 	});
+}
+
+function createEditHTML(id, description, done) {
+	
+	var editElements = '<div id=\''+ id + '\'><input type="text" name="editText" id="editText-'+ id +'" value="'+ description +'">'
+					    +'<button onclick="editTask(\''+ id + '\', \''+ description + '\', ' + done +')">Save</button>'
+						+'<button onclick="cancelTask(\''+ id + '\', \''+ description + '\', ' + done +')">Cancel</button><br><br>';
+	
+	$("#" + id).replaceWith(editElements);
+}
+
+function editTask(id, originalDesc, done) {
+	
+	var task = {
+    description: $('#editText-'+id).val(),
+    done: done
+  };
+  
+   $.ajax({
+	type: 'PUT',
+	url: rootURL + '/edit/'+id,
+	data: JSON.stringify(task),
+	contentType: 'application/json',
+	dataType: 'json',
+	success: cancelTask(id, task.description, done)
+  });	
+}
+
+function cancelTask(id, description, done) {
+	
+	var taskElement = '<div id=\''+ id + '\'><p>' + description + 
+		'</p><button onclick="createEditHTML(\''+ id + '\', \''+ description + '\', ' + done + 
+		')">Edit</button><button onclick="deleteTask(\''+ id + '\')">Delete</button>';
+		
+		if(done == true) {
+			taskElement += '<input type="checkbox" id="checkbox-'+ id + '"onclick="taskDone(\''+ id + '\')" checked/> Done</div>';
+		}
+		else {
+			taskElement += '<input type="checkbox" id="checkbox-'+ id + '"onclick="taskDone(\''+ id + '\')" /> Done</div>';
+		}
+		
+	$("#" + id).replaceWith(taskElement);
 }
 
 

@@ -50,8 +50,8 @@ namespace TaskList.API.Controllers
 
             var taskItem = new TaskItem()
             {
+                Id = id,
                 Done = task.Done,
-                Id = Guid.NewGuid(),
                 Description = task.Description
             };
 
