@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TaskList.API.Models;
@@ -26,6 +27,8 @@ namespace TaskList.API.Database
 
         public Task<bool> Exists(Guid id) => tasks.AnyAsync(t => t.Id == id);
 
-        public Task<List<TaskItem>> GetAll() =>  tasks.ToListAsync();
+        public Task<List<TaskItem>> GetAll() =>  tasks
+                                                .OrderBy(t => t.TimeAdded)
+                                                .ToListAsync();
     }
 }

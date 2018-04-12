@@ -11,9 +11,10 @@ using TaskList.API.Database;
 namespace TaskList.API.Migrations
 {
     [DbContext(typeof(TaskDbContext))]
-    partial class TaskDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180412231148_UpdateTaskItem")]
+    partial class UpdateTaskItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

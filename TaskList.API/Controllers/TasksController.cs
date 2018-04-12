@@ -22,6 +22,7 @@ namespace TaskList.API.Controllers
 
         [HttpGet]
         public async Task<IEnumerable<TaskItem>> Get() {
+
             return await context.GetAll();
         }
 
@@ -32,6 +33,7 @@ namespace TaskList.API.Controllers
             {
                 Done = task.Done,
                 Id = Guid.NewGuid(),
+                TimeAdded = DateTime.Now,
                 Description = task.Description
             };
 

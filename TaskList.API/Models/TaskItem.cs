@@ -6,6 +6,7 @@ namespace TaskList.API.Models
     {
         public Guid Id { get; set; }
         public bool Done { get; set; }
+        public DateTime TimeAdded { get; set; }
         public string Description { get; set; }
     }
 }
