@@ -2,22 +2,23 @@
 <html>
 <head>
 <title>Task List</title>
-<link rel="stylesheet" type="text/css" href="stylesheet.css">
+<link rel="stylesheet" type="text/css" href="style.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="script.js"></script>
 </head>
 <body>
 
-<h1>Task List</h1>
+<div class="task-container">
 
-<div id="errors">
+	<h1>Task List</h1>
+	
+	<div id="task-items">
+	</div>
+	
+	<div class="task-form">
+		<input type="text" class="task-textbox" id="task-input" >
+		<div class="item-buttons"><button class="task-button" onclick="postTask()">Add</button></div>
+	</div>
 </div>
-
-<div id="taskList">
-</div>
-
-<input type="text" name="task" id="task">
-<button onclick="postTask()">Add</button>
-
 </body>
 </html>

@@ -13,18 +13,18 @@ $.ajax({
 function createTaskList(taskList)
 {
 	$.each(taskList, function(i, task) {
-		appenedToList(task);
+		appendToList(task);
      });
 }
 
-function appenedToList(task) {	
-	$("#taskList").append(createTaskHTML(task.id, task.description, task.done));
+function appendToList(task) {	
+	$("#task-items").append(createTaskHTML(task.id, task.description, task.done));
 }
 
 function postTask() {
 	
   var task = {
-    description: $('#task').val(),
+    description: $('#task-input').val(),
     done: false
   };
 
@@ -36,12 +36,12 @@ function postTask() {
 	dataType: 'json',
 	success: function(id) {
 		var newTask = {
-			 description: $('#task').val(),
+			 description: $('#task-input').val(),
 		     done: false,
 			 id: id
 		};
-		$('#task').val('');
-		appenedToList(newTask);
+		$('#task-input').val('');
+		appendToList(newTask);
 	  }
   });
 }
@@ -74,9 +74,9 @@ function taskDone(id) {
 
 function createEditHTML(id, description, done) {
 	
-	var editElements = '<div id=\''+ id + '\'><input type="text" name="editText" id="editText-'+ id +'" value="'+ description +'">'
-					    +'<button onclick="editTask(\''+ id + '\', \''+ description + '\', ' + done +')">Save</button>'
-						+'<button onclick="placeTask(\''+ id + '\', \''+ description + '\', ' + done +')">Cancel</button><br><br>';
+	var editElements = '<div id=\''+ id + '\' class="task-list-item"><div class="task-description"><input type="text" class="task-textbox" id="editText-'+ id +'" value="'+ description +'">'
+					    +'<div class="item-buttons"><button class="task-button" onclick="editTask(\''+ id + '\', \''+ description + '\', ' + done +')">Save</button>'
+						+'<button class="task-button" onclick="placeTask(\''+ id + '\', \''+ description + '\', ' + done +')">Cancel</button></div></div>';
 	
 	$("#" + id).replaceWith(editElements);
 }
@@ -104,21 +104,16 @@ function placeTask(id, description, done) {
 
 function createTaskHTML(id, description, done) {
 	
-	var taskElement = '<div id=\''+ id + '\'><p>' + description + 
-		'</p><button onclick="createEditHTML(\''+ id + '\', \''+ description + '\', ' + done + 
-		')">Edit</button><button onclick="deleteTask(\''+ id + '\')">Delete</button>';
+	var taskElement = '<div id=\''+ id + '\' class="task-list-item" ><div class="task-description">' + description + 
+		'</span><div class="item-buttons"><button class="task-button" onclick="createEditHTML(\''+ id + '\', \''+ description + '\', ' + done + 
+		')">Edit</button><button class="task-button" onclick="deleteTask(\''+ id + '\')">Delete</button>';
 		
 		if(done == true) {
-			taskElement += '<input type="checkbox" id="checkbox-'+ id + '"onclick="taskDone(\''+ id + '\')" checked/> Done</div>';
+			taskElement += '<input type="checkbox" class="task-done" id="checkbox-'+ id + '"onclick="taskDone(\''+ id + '\')" checked/><span>Done</span></div></div>';
 		}
 		else {
-			taskElement += '<input type="checkbox" id="checkbox-'+ id + '"onclick="taskDone(\''+ id + '\')" /> Done</div>';
+			taskElement += '<input type="checkbox" class="task-done" id="checkbox-'+ id + '"onclick="taskDone(\''+ id + '\')" /><span>Done</span></div></div>';
 		}
 	
 	return taskElement;
 }
-
-
-
-
-
